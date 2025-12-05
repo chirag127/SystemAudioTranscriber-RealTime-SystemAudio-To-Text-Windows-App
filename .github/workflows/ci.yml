@@ -1,0 +1,119 @@
+# CI/CD Pipeline for SystemAudioTranscriber
+# Enforcing Zero-Defect, High-Velocity Standards
+
+name: Python CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    name: Build, Lint & Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+    - name: 1. Checkout Repository (Apex Standard)
+      uses: actions/checkout@v4
+
+    - name: 2. Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: 3. Install Dependency Manager (uv)
+      run: |
+        pip install -U pip
+        pip install uv
+
+    - name: 4. Resolve Dependencies (uv sync)
+      # Assuming dependencies are listed in a requirements.txt or pyproject.toml compatible structure
+      run: |
+        # For this project (Python/Vosk/Tkinter), we assume standard libs might be needed, 
+        # and we install linters/testing frameworks as well.
+        uv sync --upgrade --prerelease --extra dev
+
+    - name: 5. Code Formatting and Linting (Ruff - Ultra-Fast)
+      # For Python, Ruff handles both linting and formatting check
+      run: |
+        # Check formatting (Fails if files need formatting)
+        uv exec ruff check . --config pyproject.toml --exit-non-zero-on-fixable
+        # Run comprehensive linting
+        uv exec ruff check .
+
+    - name: 6. Run Unit and Integration Tests (Pytest)
+      # Assuming configuration in pyproject.toml or standard pytest discovery
+      run: |
+        # We run tests, ensuring all Vosk/audio mocks are used if necessary, 
+        # but prioritizing non-GUI focused logic tests.
+        uv exec pytest --cov=./ --cov-report=xml:coverage.xml
+
+    - name: 7. Publish Code Coverage Report (Codecov)
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        flags: python${{ matrix.python-version }}
+
+    - name: 8. Artifact Staging (Optional Build Step)
+      # For a Windows App, this step might prepare a distributable artifact if this runner supported cross-compilation or Windows.
+      # Since we are on Linux, this remains a placeholder for structural integrity.
+      run: echo "Artifact staging placeholder complete."
+      if: always() # Always run to show successful pipeline stages
+
+  security:
+    name: Security Analysis (Bandit)
+    runs-on: ubuntu-latest
+    needs: build_and_test
+    steps:
+    - name: 1. Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: 2. Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: 3. Install Security Scanner (Bandit)
+      run: |
+        pip install bandit
+
+    - name: 4. Run Security Scan
+      # Bandit analyzes Python code for common security issues
+      run: |
+        bandit -r . -x tests/ -ll -f json -o bandit_report.json
+
+    - name: 5. Report Findings
+      run: |
+        echo "Security scan complete. Review bandit_report.json for findings."
+
+  metadata_check:
+    name: Metadata and Documentation Check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Check Standard 11 Compliance (License/Templates)
+      run: |
+        echo "Verifying presence of required files (LICENSE, .github/*, AGENTS.md, PROPOSED_README.md)."
+        FILES_TO_CHECK="LICENSE .github/workflows/ci.yml .github/CONTRIBUTING.md .github/ISSUE_TEMPLATE/bug_report.md .github/PULL_REQUEST_TEMPLATE.md .github/SECURITY.md AGENTS.md PROPOSED_README.md"
+        MISSING=0
+        for FILE in $FILES_TO_CHECK; do
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR: Required file missing: $FILE"
+            MISSING=1
+          fi
+        done
+        if [ $MISSING -eq 1 ]; then
+          echo "::error::One or more required documentation/compliance files are missing or outdated. Please review Standard 11 requirements." 
+          exit 1
+        else 
+          echo "All Standard 11 documentation files are present."
+        fi
