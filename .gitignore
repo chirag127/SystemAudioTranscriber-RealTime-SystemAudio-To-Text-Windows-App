@@ -1,0 +1,49 @@
+# Python Environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+env/
+*
+
+# Build & Distribution
+dist/
+build/
+*.egg-info/
+
+# Editor/IDE Artifacts (VS Code, PyCharm, etc.)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Linting/Formatting Caches (Ruff, Biome equivalent in Python space)
+.ruff_cache/
+
+# Testing Artifacts
+.pytest_cache/
+htmlcov/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Windows Specific Artifacts (Given this is a Windows App)
+*.exe
+*.dll
+*.lib
+*.ilk
+*.exp
+*.pdb
+*.log
+
+# Vosk Model Cache (If models are downloaded dynamically)
+/vosk_models/
+
+# Data artifacts, if generated
+*.wav
+*.mp3
