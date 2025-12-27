@@ -1,52 +1,38 @@
-# Pull Request Template
+---
+name: Pull Request
+about: Propose a change to the project
+title: ''
+labels: ''
+assignees: ''
 
-## 1. Pull Request Type
+---
 
-*(Select one or more)*
+## Description
 
-- [ ] Feature
-- [ ] Bug Fix
-- [ ] Documentation Update
-- [ ] Refactoring
-- [ ] Performance Improvement
-- [ ] Testing
-- [ ] Chore
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
 
-## 2. Description
+## Type of change
 
-Provide a concise and clear description of the changes introduced in this pull request. Explain the problem being solved or the new functionality being added.
+Please delete options that are not relevant.
 
-## 3. Motivation
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
 
-What is the motivation behind this change? What problem does it solve? How does it align with the project's goals?
+## How Has This Been Tested?
 
-## 4. Changes Made
+Please describe the tests that you ran to verify your changes.
 
-List the key changes made in this pull request. Be specific.
+- [ ] Test A
+- [ ] Test B
 
-- Change 1
-- Change 2
-- ...
+## Checklist:
 
-## 5. Related Issues
-
-If this pull request resolves or relates to any open issues, please link them here (e.g., `Fixes #123`, `Closes #456`).
-
-## 6. Checklist
-
-Before submitting, please ensure the following have been completed:
-
-- [ ] My code adheres to the project's coding standards and style guidelines.
-- [ ] I have performed a self-review of my own code.
-- [ ] I have updated the documentation (if necessary).
-- [ ] I have added or updated tests to cover my changes.
-- [ ] All new and existing functionality is working as expected.
-- [ ] My changes are tested and verified against the current development branch.
-
-## 7. Screenshots/Recordings (If Applicable)
-
-If your changes involve UI modifications or visual output, please include screenshots or recordings.
-
-## 8. Additional Information
-
-Any other context or information that might be helpful for the reviewer.
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
